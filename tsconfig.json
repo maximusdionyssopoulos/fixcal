@@ -7,5 +7,12 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    /* Required for shadcn-ui/ui */
+    "baseUrl": "./app/frontend",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
 }
