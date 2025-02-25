@@ -15,7 +15,7 @@ export default function Root() {
   };
   return (
     <>
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-100 via-background to-orange-100/20 dark:from-orange-800/80 dark:to-orange-900/20" />
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-100 via-background to-orange-100/30 dark:from-orange-800/80 dark:to-orange-900/40" />
       <div className="flex-grow relative h-full w-full overflow-hidden">
         <div className="mx-auto max-w-4xl px-4 py-24 relative z-10">
           <div className="space-y-12">
@@ -62,7 +62,16 @@ export default function Root() {
                 size={"lg"}
                 className=" w-full bg-radial from-orange-500 from-45% to-orange-300 text-background dark:from-orange-600 dark:to-orange-400 dark:text-foreground font-mono text-md hover:opacity-90"
               >
-                Generate Calendar
+                Subscribe to Calendar
+              </Button>
+              <Button
+                type="submit"
+                disabled={processing}
+                size={"lg"}
+                variant={"ghost"}
+                className=" w-full font-mono text-md border border-orange-100 dark:border-orange-900 hover:bg-orange-50/50 dark:hover:bg-orange-950/80"
+              >
+                Generate and Download Calendar file
               </Button>
             </form>
           </div>

@@ -10,11 +10,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex flex-col h-svh">
         {children}
         <footer className="p-4 flex flex-row gap-4 items-center backdrop-blur-sm relative z-10">
+          <ModeToggle />
           <a href="https://github.com/maximusdionyssopoulos">
             <Github size={16} />
           </a>
-          <ModeToggle />
-          <span className="text-xs">Built by Maximus Dionyssopoulos</span>
+          <span className="text-xs ml-auto">
+            Built by Maximus Dionyssopoulos
+          </span>
         </footer>
       </main>
     </ThemeProvider>

@@ -64,3 +64,7 @@ gem "devise"
 gem "omniauth"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth-google-oauth2", "~> 1.0"
+
+gem "icalendar", "~> 2.10"
+
+gem "nanoid", "~> 2.0"
