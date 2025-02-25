@@ -1,13 +1,13 @@
 class CalendarsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :require_google_oauth_user!
   before_action :set_calendar, only: %i[ show edit update destroy ]
 
-  inertia_share flash: -> { flash.to_hash }
+  # inertia_share flash: -> { flash.to_hash }
 
   # GET /calendars
   def index
     @calendars = Calendar.all
-    render inertia: 'Calendar/Index', props: {
+    render inertia: "Calendar/Index", props: {
       calendars: @calendars.map do |calendar|
         serialize_calendar(calendar)
       end
@@ -16,7 +16,7 @@ class CalendarsController < ApplicationController
 
   # GET /calendars/1
   def show
-    render inertia: 'Calendar/Show', props: {
+    render inertia: "Calendar/Show", props: {
       calendar: serialize_calendar(@calendar)
     }
   end
@@ -31,7 +31,7 @@ class CalendarsController < ApplicationController
 
   # GET /calendars/1/edit
   def edit
-    render inertia: 'Calendar/Edit', props: {
+    render inertia: "Calendar/Edit", props: {
       calendar: serialize_calendar(@calendar)
     }
   end
@@ -63,6 +63,11 @@ class CalendarsController < ApplicationController
   end
 
   private
+  def require_google_oauth_user!
+    # Only redirect if user is not yet signed in
+    redirect_to auth_path unless user_signed_in?
+  end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_calendar
       @calendar = Calendar.find(params[:id])

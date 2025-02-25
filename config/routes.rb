@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :calendars, except: [ :new ]
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  as :user do
+    get "auth", to: "users/sessions#new"
+  end
 
   inertia "/" => "Root"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
