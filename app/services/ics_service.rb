@@ -16,6 +16,15 @@ class IcsService
       calendar.add_event(event)
     end
 
+    @upcoming_match_data.each do |match|
+      event = Icalendar::Event.new
+      event.summary = "#{match["HomeTeam"]["Name"]} - #{match["AwayTeam"]["Name"]}"
+      event.location = match["CourtName"]
+      event.description = "#{match["CompetitionName"]} - Round #{match["Round"]}"
+      event.dtstart = parse_match_datetime(match["MatchDate"], match["MatchTime"])
+      calendar.add_event(event)
+    end
+
     calendar.to_ical
   end
 
@@ -27,11 +36,11 @@ class IcsService
     # Handle potential year rollover (if date is in past months but should be next year)
     match_month = Date.parse(date_str).month
     current_month = Time.now.month
-    year_to_use = if match_month < current_month && match_month < 3 # Assuming fixtures usually don't go beyond 2-3 months into next year
+    year_to_use = if match_month < current_month && match_month < 3
                     current_year + 1
-                  else
+    else
                     current_year
-                  end
+    end
 
     # Combine date and time with year
     datetime_str = "#{date_str}, #{year_to_use} #{time_str}"
