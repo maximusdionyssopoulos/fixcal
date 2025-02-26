@@ -68,3 +68,7 @@ gem "omniauth-google-oauth2", "~> 1.0"
 gem "icalendar", "~> 2.10"
 
 gem "nanoid", "~> 2.0"
+
+gem "httparty", "~> 0.22.0"
+
+gem "nokogiri", "~> 1.18"
