@@ -9,9 +9,9 @@ class FixtureService
     return nil unless api_url
 
     json_response = self.class.get(api_url)
-    # Rails.logger.debug json_response.pretty_inspect
 
     data = JSON.parse(json_response.body)
+    return nil unless data["MobTeamDetails"]
 
     {
       completed_matches: data["MobTeamDetails"]["CompletedMatchCollection"],
@@ -25,8 +25,8 @@ class FixtureService
     script_content = doc.css('script[type="text/javascript"]').text
 
     match = script_content.match(/var url = "(?<base_url>[^"]+)" \+ (?<centre_id>\d+) \+ "&teamId=" \+ (?<team_id>\d+)/)
-      return unless match
+    return nil unless match
 
-      "#{match[:base_url]}#{match[:centre_id]}&teamId=#{match[:team_id]}"
+    "#{match[:base_url]}#{match[:centre_id]}&teamId=#{match[:team_id]}"
   end
 end

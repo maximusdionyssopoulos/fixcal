@@ -1,13 +1,14 @@
 import { useForm } from "@inertiajs/react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function Root() {
-  const { data, setData, post, processing, errors } = useForm({
-    url: "",
-  });
+  const { data, setData, post, processing, errors, setError, clearErrors } =
+    useForm({
+      url: "",
+    });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,19 +16,40 @@ export default function Root() {
     post("/calendars");
   };
 
+  // To ensure the download we need to use a non-inertia request thus use the axios library since sits included
   const handleDownload = async () => {
-    // Make the request with async/await
-    const response = await axios.get("/download", {
-      params: {
-        url: data.url,
-      },
-    });
-
-    let blob = new Blob([response.data], { type: "text/calendar" });
-    let link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "test.ics";
-    link.click();
+    if (
+      !data.url ||
+      !data.url.trim() ||
+      !data.url.startsWith("https://sportfix.net/app/teamdetails?")
+    ) {
+      setError("url", "Please enter a valid URL");
+      return;
+    }
+    try {
+      clearErrors();
+      const response = await axios.get("/download", {
+        params: {
+          url: data.url,
+        },
+      });
+      // transform the response into a blob which can be downloaded
+      let blob = new Blob([response.data], { type: "text/calendar" });
+      let link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "fixtures.ics";
+      link.click();
+    } catch (error: AxiosError<{ data: string }> | Error | unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data) {
+          setError("url", error.response.data.error as string);
+        } else {
+          setError("url", "Failed to download calendar. Please try again.");
+        }
+      } else {
+        setError("url", "An unexpected error occurred.");
+      }
+    }
   };
   return (
     <>
@@ -76,7 +98,8 @@ export default function Root() {
                   type="submit"
                   disabled={processing}
                   size={"lg"}
-                  className=" w-full bg-radial from-orange-500 from-45% to-orange-300 text-background dark:from-orange-600 dark:to-orange-400 dark:text-foreground font-mono text-md hover:opacity-90">
+                  className=" w-full bg-radial from-orange-500 from-45% to-orange-300 text-background dark:from-orange-600 dark:to-orange-400 dark:text-foreground font-mono text-md hover:opacity-90"
+                >
                   Subscribe to Calendar
                 </Button>
               </form>
@@ -84,7 +107,8 @@ export default function Root() {
                 onClick={handleDownload}
                 size={"lg"}
                 variant={"ghost"}
-                className=" w-full font-mono text-md border border-orange-100 dark:border-orange-900 hover:bg-orange-50/50 dark:hover:bg-orange-950/80">
+                className=" w-full font-mono text-md border border-orange-100 dark:border-orange-900 hover:bg-orange-50/50 dark:hover:bg-orange-950/80"
+              >
                 Generate and Download Calendar file
               </Button>
             </div>
