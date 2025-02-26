@@ -1,5 +1,5 @@
 import { Button } from "./button";
-import { Moon, Sun } from "lucide-react";
+import { LaptopMinimal, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 
 export default function ModeToggle() {
@@ -11,6 +11,9 @@ export default function ModeToggle() {
   const setDark = () => {
     setTheme("dark");
   };
+  const setSystem = () => {
+    setTheme("system");
+  };
   return (
     <div className="inline-flex items-center">
       <Button variant={"ghost"} size={"icon"} onClick={setLight}>
@@ -18,6 +21,9 @@ export default function ModeToggle() {
       </Button>
       <Button variant={"ghost"} size={"icon"} onClick={setDark}>
         <Moon size={16} />
+      </Button>
+      <Button variant={"ghost"} size={"icon"} onClick={setSystem}>
+        <LaptopMinimal />
       </Button>
     </div>
   );
