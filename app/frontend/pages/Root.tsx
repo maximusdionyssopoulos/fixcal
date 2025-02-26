@@ -3,7 +3,7 @@ import { FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function Root() {
+export default function Root({ token }: { token: string }) {
   const { data, setData, post, processing, errors } = useForm({
     url: "",
   });
