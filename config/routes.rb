@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   resources :calendars, except: [ :new ]
+
+  get "/download", to: "root#download"
+
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   as :user do
     get "auth", to: "users/sessions#new"

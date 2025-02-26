@@ -1,9 +1,10 @@
 import { useForm } from "@inertiajs/react";
+import axios from "axios";
 import { FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function Root({ token }: { token: string }) {
+export default function Root() {
   const { data, setData, post, processing, errors } = useForm({
     url: "",
   });
@@ -12,6 +13,21 @@ export default function Root({ token }: { token: string }) {
     e.preventDefault();
     // TODO: Placeholder url
     post("/calendars");
+  };
+
+  const handleDownload = async () => {
+    // Make the request with async/await
+    const response = await axios.get("/download", {
+      params: {
+        url: data.url,
+      },
+    });
+
+    let blob = new Blob([response.data], { type: "text/calendar" });
+    let link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "test.ics";
+    link.click();
   };
   return (
     <>
@@ -36,44 +52,42 @@ export default function Root({ token }: { token: string }) {
               </p>
             </div>
 
-            {/* Form Section */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="url" className="text-base font-medium" hidden>
-                  URL
-                </label>
-                <Input
-                  type="text"
-                  name="url"
-                  id="url"
-                  value={data.url}
-                  onChange={(e) => setData("url", e.target.value)}
-                  placeholder="https://sportfix.net/app/teamdetails?"
-                  className=" bg-background h-12 border-orange-200/20"
-                />
-                {errors.url && (
-                  <div className="text-sm text-destructive">{errors.url}</div>
-                )}
-              </div>
+            <div className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label htmlFor="url" className="text-base font-medium" hidden>
+                    URL
+                  </label>
+                  <Input
+                    type="text"
+                    name="url"
+                    id="url"
+                    value={data.url}
+                    onChange={(e) => setData("url", e.target.value)}
+                    placeholder="https://sportfix.net/app/teamdetails?"
+                    className=" bg-background h-12 border-orange-200/20"
+                  />
+                  {errors.url && (
+                    <div className="text-sm text-destructive">{errors.url}</div>
+                  )}
+                </div>
 
+                <Button
+                  type="submit"
+                  disabled={processing}
+                  size={"lg"}
+                  className=" w-full bg-radial from-orange-500 from-45% to-orange-300 text-background dark:from-orange-600 dark:to-orange-400 dark:text-foreground font-mono text-md hover:opacity-90">
+                  Subscribe to Calendar
+                </Button>
+              </form>
               <Button
-                type="submit"
-                disabled={processing}
-                size={"lg"}
-                className=" w-full bg-radial from-orange-500 from-45% to-orange-300 text-background dark:from-orange-600 dark:to-orange-400 dark:text-foreground font-mono text-md hover:opacity-90"
-              >
-                Subscribe to Calendar
-              </Button>
-              <Button
-                type="submit"
-                disabled={processing}
+                onClick={handleDownload}
                 size={"lg"}
                 variant={"ghost"}
-                className=" w-full font-mono text-md border border-orange-100 dark:border-orange-900 hover:bg-orange-50/50 dark:hover:bg-orange-950/80"
-              >
+                className=" w-full font-mono text-md border border-orange-100 dark:border-orange-900 hover:bg-orange-50/50 dark:hover:bg-orange-950/80">
                 Generate and Download Calendar file
               </Button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
