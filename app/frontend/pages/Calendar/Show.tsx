@@ -1,38 +1,37 @@
-import { Head, Link } from '@inertiajs/react'
-import Calendar from './Calendar'
-import { CalendarType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import Calendar from "./Calendar";
+import { CalendarType } from "./types";
 
 interface ShowProps {
-  calendar: CalendarType
-  flash: { notice?: string }
+  calendar: CalendarType;
 }
 
-export default function Show({ calendar, flash }: ShowProps) {
+export default function Show({ calendar }: ShowProps) {
   return (
     <>
-      <Head title={`Calendar #${calendar.id}`} />
+      <Head title={`Calendar #${calendar.public_id}`} />
+      <div className="max-w-5xl p-6">
+        <h1>Calendar #{calendar.public_id}</h1>
 
-      {flash.notice && <p style={{ color: 'green' }}>{flash.notice}</p>}
+        <Calendar calendar={calendar} />
 
-      <h1>Calendar #{calendar.id}</h1>
+        <div>
+          <Link href={`/calendars/${calendar.public_id}/edit`}>
+            Edit this calendar
+          </Link>
+          <Link href="/calendars">Back to calendars</Link>
 
-      <Calendar calendar={calendar} />
+          <br />
 
-      <div>
-        <Link href={`/calendars/${calendar.id}/edit`}>Edit this calendar</Link>
-        {' | '}
-        <Link href="/calendars">Back to calendars</Link>
-
-        <br />
-
-        <Link
-          href={`/calendars/${calendar.id}`}
-          as="button"
-          method="delete"
-        >
-          Destroy this calendar
-        </Link>
+          <Link
+            href={`/calendars/${calendar.public_id}`}
+            as="button"
+            method="delete"
+          >
+            Destroy this calendar
+          </Link>
+        </div>
       </div>
     </>
-  )
+  );
 }
