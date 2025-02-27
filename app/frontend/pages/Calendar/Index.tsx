@@ -46,45 +46,40 @@ export default function Index({ calendars }: IndexProps) {
         </div>
         <div className="flex flex-col gap-3 pt-3">
           {calendars.map((calendar) => (
-            <div
+            <Link
               key={calendar.public_id}
-              className="border rounded-lg overflow-hidden shadow-sm"
+              href={`/calendars/${calendar.public_id}`}
+              className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md group ransition-shadow bg-muted/50 dark:bg-muted p-4 flex flex-wrap gap-3 justify-between"
             >
-              <div className="bg-muted/50 dark:bg-muted p-4 ">
-                <div className="flex flex-wrap gap-3 justify-between">
-                  <Link
-                    href={`/calendars/${calendar.public_id}`}
-                    className="font-medium text-lg flex flex-col gap-0.5 hover:font-semibold"
-                  >
-                    team-{getTeamId(calendar.url)}
-                    <div className="flex items-center text-sm gap-2 text-muted-foreground">
-                      <StatusBadge status="Completed">
-                        {" "}
-                        Matches ({calendar.completed_events.length})
-                      </StatusBadge>
-                      <StatusBadge status="Upcoming">
-                        {" "}
-                        Matches ({calendar.upcoming_events.length})
-                      </StatusBadge>
-                    </div>
-                  </Link>
-                  <a
-                    href={calendar.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:text-primary/80 flex flex-col items-center gap-3 text-sm"
-                  >
-                    <span className="inline-flex gap-1 items-center">
-                      View source <ExternalLink className="size-3.5" />
-                    </span>
-                    <span className="text-muted-foreground inline-flex items-center gap-1">
-                      <Tag className="size-4" />
-                      {getDomain(calendar.url)}
-                    </span>
-                  </a>
+              <div className="font-medium text-lg flex flex-col gap-0.5 group-hover:font-semibold">
+                team-{getTeamId(calendar.url)}
+                <div className="flex items-center text-sm gap-2 text-muted-foreground">
+                  <StatusBadge status="Completed">
+                    {" "}
+                    Matches ({calendar.completed_events.length})
+                  </StatusBadge>
+                  <StatusBadge status="Upcoming">
+                    {" "}
+                    Matches ({calendar.upcoming_events.length})
+                  </StatusBadge>
                 </div>
               </div>
-            </div>
+              <a
+                href={calendar.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary/80 flex flex-col items-center gap-3 text-sm"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span className="inline-flex gap-1 items-center">
+                  View source <ExternalLink className="size-3.5" />
+                </span>
+                <span className="text-muted-foreground inline-flex items-center gap-1">
+                  <Tag className="size-4" />
+                  {getDomain(calendar.url)}
+                </span>
+              </a>
+            </Link>
           ))}
         </div>
       </div>
