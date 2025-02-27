@@ -13,7 +13,7 @@ const scroller = (node: HTMLDivElement | null): void => {
 export default function Calendar({ calendar }: CalendarProps) {
   return (
     <div className="relative">
-      <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700" />
+      <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-neutral-200 dark:bg-neutral-700" />
       <div className="space-y-6">
         {calendar.completed_events.map((event) => (
           <Event
@@ -58,11 +58,13 @@ function Event({
             : `R${event.Round}`}
         </div>
       </div>
-      <div className="ml-16 w-full p-4 flex flex-col gap-1 border border-neutral-200 shadow-sm rounded-md">
+      <div className="ml-16 w-full p-4 flex flex-col gap-1 border border-neutral-200 shadow-sm rounded-md dark:border-neutral-600">
         <div className="flex flex-row flex-wrap gap-2 sm:gap-4 items-center justify-between">
           <div className="text-sm inline-flex flex-wrap gap-1 sm:gap-4">
             <StatusBadge status={status} />
-            <p className="text-neutral-500">{event.CompetitionName}</p>
+            <p className="text-neutral-500 dark:text-neutral-400">
+              {event.CompetitionName}
+            </p>
           </div>
           {event.AwayTeamScore && event.HomeTeamScore ? (
             <span className="flex items-center gap-2 text-xl font-semibold font-mono">
@@ -75,11 +77,11 @@ function Event({
         </h3>
 
         <p className="inline-flex text-sm gap-2 items-center text-primary">
-          <MapPin className="size-4 text-neutral-500" />
+          <MapPin className="size-4 text-neutral-500 dark:text-neutral-400" />
           {event.CourtName}
         </p>
         <p className="inline-flex text-sm gap-2 items-center">
-          <CalendarClock className="size-4 text-neutral-500" />{" "}
+          <CalendarClock className="size-4 text-neutral-500 dark:text-neutral-400" />{" "}
           {event.MatchDate} - {event.MatchTime}
         </p>
       </div>
