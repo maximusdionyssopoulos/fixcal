@@ -13,7 +13,7 @@ export default function StatusBadge({
   children,
 }: {
   status: "Upcoming" | "Completed";
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   const [variant] = variants[status];
   return (

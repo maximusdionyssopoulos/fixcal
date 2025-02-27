@@ -48,13 +48,13 @@ export default function Index({ calendars }: IndexProps) {
           {calendars.map((calendar) => (
             <div
               key={calendar.public_id}
-              className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+              className="border rounded-lg overflow-hidden shadow-sm"
             >
-              <div className="bg-muted dark:bg-muted p-4 ">
+              <div className="bg-muted/50 dark:bg-muted p-4 ">
                 <div className="flex flex-wrap gap-3 justify-between">
                   <Link
                     href={`/calendars/${calendar.public_id}`}
-                    className="font-medium text-lg flex flex-col gap-0.5"
+                    className="font-medium text-lg flex flex-col gap-0.5 hover:font-semibold"
                   >
                     team-{getTeamId(calendar.url)}
                     <div className="flex items-center text-sm gap-2 text-muted-foreground">

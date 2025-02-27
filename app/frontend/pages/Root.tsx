@@ -90,7 +90,9 @@ export default function Root() {
                     className=" bg-background h-12 border-orange-200/20"
                   />
                   {errors.url && (
-                    <div className="text-sm text-destructive">{errors.url}</div>
+                    <div className="text-sm text-destructive-foreground">
+                      {errors.url}
+                    </div>
                   )}
                 </div>
 

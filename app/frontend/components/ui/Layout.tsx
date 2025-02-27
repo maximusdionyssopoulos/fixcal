@@ -43,12 +43,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <footer className="p-4 flex flex-row gap-4 items-center relative z-10">
           <ModeToggle />
-          <a href="https://github.com/maximusdionyssopoulos">
+          <a
+            href="https://github.com/maximusdionyssopoulos"
+            className="text-xs ml-auto inline-flex items-center gap-2"
+          >
             <Github size={16} />
-          </a>
-          <span className="text-xs ml-auto">
             Built by Maximus Dionyssopoulos
-          </span>
+          </a>
         </footer>
       </main>
     </ThemeProvider>
