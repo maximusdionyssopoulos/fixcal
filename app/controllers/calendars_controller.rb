@@ -6,7 +6,7 @@ class CalendarsController < ApplicationController
 
   # GET /calendars
   def index
-    @calendars = Calendar.all
+    @calendars = current_user.calendars.all
     render inertia: "Calendar/Index", props: {
       calendars: @calendars.map do |calendar|
         serialize_calendar(calendar)
@@ -38,12 +38,33 @@ class CalendarsController < ApplicationController
 
   # POST /calendars
   def create
-    @calendar = Calendar.new(calendar_params)
+    # @calendar = current_user.calendars.new(
+    #   url: params[:url],
+    #   upcoming_events: data[:upcoming_matches],
+    #   completed_events: data[:completed_matches],
+    #   public_id: Nanoid.generate(size: 15)
+    # )
+    @calendar = current_user.calendars.new(calendar_params)
+    @calendar.public_id = Nanoid.generate(size: 15)
 
     if @calendar.save
-      redirect_to @calendar, notice: "Calendar was successfully created."
+      fixture_service = FixtureService.new
+
+      data = fixture_service.fetch_data(params[:url])
+      calendar_data = IcsService.new(data[:completed_matches], data[:upcoming_matches]).generate
+
+      @calendar.upcoming_events = data[:upcoming_matches]
+      @calendar.completed_events = data[:completed_matches]
+      @calendar.save
+
+      @calendar.ics_file.attach(
+            io: StringIO.new(calendar_data),
+            filename: "calendar_#{@calendar.public_id}.ics",
+            content_type: "text/calendar"
+          )
+      redirect_to calendar_path(@calendar)
     else
-      redirect_to new_calendar_url, inertia: { errors: @calendar.errors }
+      redirect_to "/", inertia: { errors: @calendar.errors }
     end
   end
 
@@ -70,17 +91,17 @@ class CalendarsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_calendar
-      @calendar = Calendar.find(params[:id])
+      @calendar = Calendar.find_by(public_id: params[:public_id])
     end
 
     # Only allow a list of trusted parameters through.
     def calendar_params
-      params.require(:calendar).permit(:url, :data, :public_id, :user_id)
+      params.expect(calendar: [ :url ])
     end
 
     def serialize_calendar(calendar)
       calendar.as_json(only: [
-        :id, :url, :data, :public_id, :user_id
+        :url, :upcoming_events, :completed_events, :public_id
       ])
     end
 end
