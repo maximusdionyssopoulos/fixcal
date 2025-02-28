@@ -13,8 +13,8 @@ export default function Show({ calendar }: ShowProps) {
   return (
     <>
       <Head title={`Calendar #${calendar.public_id}`} />
-      <div className="max-w-5xl mx-auto w-full px-6">
-        <div className="flex flex-row gap-6 justify-between pb-2">
+      <div className="sticky top-0 pt-2 z-20 backdrop-blur-xl w-full border-b dark:border-neutral-600">
+        <div className="flex flex-row gap-6 justify-between pb-2 max-w-5xl px-6 mx-auto">
           <Link
             href="/calendars"
             className={cn(buttonVariants({ variant: "link", size: "lg" }))}
@@ -45,6 +45,8 @@ export default function Show({ calendar }: ShowProps) {
             </Link>
           </div>
         </div>
+      </div>
+      <div className="max-w-5xl mx-auto w-full px-6">
         <Calendar calendar={calendar} />
       </div>
     </>

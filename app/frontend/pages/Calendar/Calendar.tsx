@@ -12,7 +12,7 @@ const scroller = (node: HTMLDivElement | null): void => {
 
 export default function Calendar({ calendar }: CalendarProps) {
   return (
-    <div className="relative">
+    <div className="relative pt-2">
       <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-neutral-200 dark:bg-neutral-700" />
       <div className="space-y-6">
         {calendar.completed_events.map((event) => (

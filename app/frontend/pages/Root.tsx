@@ -54,7 +54,7 @@ export default function Root() {
   return (
     <>
       <div className="absolute inset-0 bg-gradient-to-br from-orange-100 via-background to-orange-100/30 dark:from-orange-800/80 dark:to-orange-900/40" />
-      <div className="flex-grow relative h-full w-full overflow-hidden">
+      <div className="grow">
         <div className="mx-auto max-w-4xl px-4 py-24 relative z-10">
           <div className="space-y-12">
             {/* Header Section */}

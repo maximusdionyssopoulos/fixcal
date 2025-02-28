@@ -33,7 +33,7 @@ export default function Index({ calendars }: IndexProps) {
     <>
       <Head title="Calendars" />
 
-      <div className="flex flex-col max-w-5xl mx-auto flex-grow relative w-full">
+      <div className="flex flex-col max-w-5xl mx-auto flex-grow relative w-full px-6">
         <div className="inline-flex gap-4 items-center justify-between">
           <h1 className="text-3xl">Calendars</h1>
           <Link

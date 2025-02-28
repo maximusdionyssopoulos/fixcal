@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Head title="FixCal" />
-      <main className="flex flex-col h-svh">
+      <main className="flex flex-col min-h-screen">
         <nav className="z-10 p-4 flex flex-row justify-between">
           <Link
             href="/"
