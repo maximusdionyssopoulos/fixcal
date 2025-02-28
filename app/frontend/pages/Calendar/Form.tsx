@@ -1,97 +1,59 @@
-import { useForm } from '@inertiajs/react'
-import { FormEvent } from 'react'
-import { CalendarFormType, CalendarType } from './types'
+import { useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Temporary fix for InertiaFormProps not being exported from @inertiajs/react
-type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<typeof useForm<TForm>>
+type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<
+  typeof useForm<TForm>
+>;
 
 interface FormProps {
-  calendar: CalendarType
-  onSubmit: (form: InertiaFormProps<CalendarFormType>) => void
-  submitText: string
+  url: string;
+  onSubmit: (form: InertiaFormProps<{ url: string }>) => void;
+  submitText: string;
 }
 
-export default function Form({ calendar, onSubmit, submitText }: FormProps) {
-  const form = useForm<CalendarFormType>({
-    url: calendar.url,
-    data: calendar.data,
-    public_id: calendar.public_id,
-    user_id: calendar.user_id,
-  })
-  const { data, setData, errors, processing } = form
+export default function Form({ url, onSubmit, submitText }: FormProps) {
+  const form = useForm({
+    url: url,
+  });
+  const { data, setData, errors, processing } = form;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    onSubmit(form)
-  }
+    e.preventDefault();
+    onSubmit(form);
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label style={{ display: 'block' }} htmlFor="url">
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <label htmlFor="url" hidden>
           Url
         </label>
-        <input
+        <Input
           type="text"
           name="url"
           id="url"
           value={data.url}
-          onChange={(e) => setData('url', e.target.value)}
+          placeholder="https://sportfix.net/app/teamdetails?"
+          className="bg-background h-12"
+          onChange={(e) => setData("url", e.target.value)}
         />
         {errors.url && (
-          <div style={{ color: 'red' }}>{errors.url}</div>
+          <div className="text-sm text-destructive-foreground">
+            {errors.url}
+          </div>
         )}
       </div>
-      <div>
-        <label style={{ display: 'block' }} htmlFor="datum">
-          Data
-        </label>
-        <input
-          type="text"
-          name="datum"
-          id="datum"
-          value={data.data}
-          onChange={(e) => setData('data', e.target.value)}
-        />
-        {errors.data && (
-          <div style={{ color: 'red' }}>{errors.data}</div>
-        )}
-      </div>
-      <div>
-        <label style={{ display: 'block' }} htmlFor="public">
-          Public
-        </label>
-        <input
-          type="text"
-          name="public"
-          id="public"
-          value={data.public_id}
-          onChange={(e) => setData('public_id', e.target.value)}
-        />
-        {errors.public_id && (
-          <div style={{ color: 'red' }}>{errors.public_id}</div>
-        )}
-      </div>
-      <div>
-        <label style={{ display: 'block' }} htmlFor="user">
-          User
-        </label>
-        <input
-          type="text"
-          name="user"
-          id="user"
-          value={data.user_id}
-          onChange={(e) => setData('user_id', e.target.value)}
-        />
-        {errors.user_id && (
-          <div style={{ color: 'red' }}>{errors.user_id}</div>
-        )}
-      </div>
-      <div>
-        <button type="submit" disabled={processing}>
-          {submitText}
-        </button>
-      </div>
+      <Button
+        type="submit"
+        disabled={processing}
+        size={"lg"}
+        className="w-full"
+      >
+        {submitText}
+      </Button>
     </form>
-  )
+  );
 }

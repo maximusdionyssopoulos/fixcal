@@ -55,13 +55,13 @@ class CalendarsController < ApplicationController
 
       @calendar.upcoming_events = data[:upcoming_matches]
       @calendar.completed_events = data[:completed_matches]
-      @calendar.save
 
       @calendar.ics_file.attach(
             io: StringIO.new(calendar_data),
             filename: "calendar_#{@calendar.public_id}.ics",
             content_type: "text/calendar"
           )
+      @calendar.save
       redirect_to calendar_path(@calendar)
     else
       redirect_to "/", inertia: { errors: @calendar.errors }
@@ -70,7 +70,25 @@ class CalendarsController < ApplicationController
 
   # PATCH/PUT /calendars/1
   def update
+    url = @calendar.url
     if @calendar.update(calendar_params)
+      # don't re-generate if the urls are the same
+      unless url.eql? @calendar.url
+        fixture_service = FixtureService.new
+
+        data = fixture_service.fetch_data(calendar_params[:url])
+        calendar_data = IcsService.new(data[:completed_matches], data[:upcoming_matches]).generate
+
+        @calendar.upcoming_events = data[:upcoming_matches]
+        @calendar.completed_events = data[:completed_matches]
+
+        @calendar.ics_file.attach(
+              io: StringIO.new(calendar_data),
+              filename: "calendar_#{@calendar.public_id}.ics",
+              content_type: "text/calendar"
+            )
+        @calendar.save
+      end
       redirect_to @calendar, notice: "Calendar was successfully updated."
     else
       redirect_to edit_calendar_url(@calendar), inertia: { errors: @calendar.errors }
