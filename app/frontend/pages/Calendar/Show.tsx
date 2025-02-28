@@ -24,9 +24,11 @@ export default function Show({ calendar }: ShowProps) {
           <div className="space-x-2">
             <Link
               href={`/calendars/${calendar.public_id}/edit`}
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "default" }),
+              )}
             >
-              Edit this calendar
+              Edit Calendar
             </Link>
             {/* TODO: Add a confirmation here */}
             <Link
@@ -36,12 +38,12 @@ export default function Show({ calendar }: ShowProps) {
               className={cn(
                 buttonVariants({
                   variant: "destructive",
-                  size: "lg",
+                  size: "default",
                   className: "bg-red-500 hover:bg-red-600 ",
                 }),
               )}
             >
-              Destroy this calendar
+              Delete
             </Link>
           </div>
         </div>
