@@ -4,13 +4,14 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { ExternalLink, Plus, Tag } from "lucide-react";
 import StatusBadge from "@/components/ui/status-badge";
+import { toast } from "sonner";
 
 interface IndexProps {
   calendars: CalendarType[];
-  // flash: { notice?: string }
+  flash: { notice?: string };
 }
 
-export default function Index({ calendars }: IndexProps) {
+export default function Index({ calendars, flash }: IndexProps) {
   const getDomain = (url: string) => {
     try {
       const domain = new URL(url).hostname.replace("www.", "");
@@ -29,6 +30,11 @@ export default function Index({ calendars }: IndexProps) {
       return "";
     }
   };
+
+  if (flash.notice) {
+    toast.success(flash.notice);
+  }
+
   return (
     <>
       <Head title="Calendars" />

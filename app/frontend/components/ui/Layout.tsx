@@ -4,6 +4,7 @@ import ModeToggle from "./mode-toggle";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { Toaster } from "./sonner";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { signed_in } = usePage().props;
@@ -52,6 +53,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </a>
         </footer>
       </main>
+      <Toaster richColors />
     </ThemeProvider>
   );
 }

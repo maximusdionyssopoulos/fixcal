@@ -62,7 +62,7 @@ class CalendarsController < ApplicationController
             content_type: "text/calendar"
           )
       @calendar.save
-      redirect_to calendar_path(@calendar)
+      redirect_to @calendar, notice: "Calendar was successfully created."
     else
       redirect_to "/", inertia: { errors: @calendar.errors }
     end

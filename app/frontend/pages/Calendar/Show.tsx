@@ -1,15 +1,42 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import Calendar from "./Calendar";
 import { CalendarType } from "./types";
 import { MoveLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface ShowProps {
   calendar: CalendarType;
+  flash: { notice?: string };
 }
 
-export default function Show({ calendar }: ShowProps) {
+export default function Show({ calendar, flash }: ShowProps) {
+  if (!calendar) {
+    return (
+      <div className="mx-auto max-w-xl w-full grow p-8 space-y-4 text-center rounded-lg mt-8 flex flex-col items-center justify-center min-h-[80vh]">
+        <h1 className="text-3xl font-semibold text-red-500">Not Found</h1>
+        <h2 className="text-xl font-medium">This calendar has been deleted.</h2>
+        <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+          The item you're looking for no longer exists or has been permanently
+          removed.
+        </p>
+        <Link
+          href="/calendars"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "default" }),
+            "mt-4",
+          )}
+        >
+          Return to Calendars
+        </Link>
+      </div>
+    );
+  }
+
+  if (flash.notice) {
+    toast.success(flash.notice);
+  }
   return (
     <>
       <Head title={`Calendar #${calendar.public_id}`} />
