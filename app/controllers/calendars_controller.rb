@@ -14,6 +14,7 @@ class CalendarsController < ApplicationController
 
   # GET /calendars/1
   def show
+    authorize @calendar
     render inertia: "Calendar/Show", props: {
       calendar: serialize_calendar(@calendar)
     }
@@ -21,6 +22,7 @@ class CalendarsController < ApplicationController
 
   # GET /calendars/1/download
   def download
+    authorize @calendar
     send_data @calendar.ics_file.download,
       type: "text/calendar",
       disposition: "attachment",
@@ -29,6 +31,7 @@ class CalendarsController < ApplicationController
 
   # GET /calendars/1/edit
   def edit
+    authorize @calendar
     render inertia: "Calendar/Edit", props: {
       calendar: serialize_calendar(@calendar)
     }
@@ -38,6 +41,8 @@ class CalendarsController < ApplicationController
   def create
     @calendar = current_user.calendars.new(calendar_params)
     @calendar.public_id = Nanoid.generate(size: 15)
+
+    authorize @calendar
 
     if @calendar.save
       @calendar.fetch_and_generate_ics(params[:url])
@@ -54,6 +59,7 @@ class CalendarsController < ApplicationController
 
   # PATCH/PUT /calendars/1
   def update
+    authorize @calendar
     url = @calendar.url
     if @calendar.update(calendar_params)
       # don't re-generate if the urls are the same
@@ -69,6 +75,7 @@ class CalendarsController < ApplicationController
 
   # DELETE /calendars/1
   def destroy
+    authorize @calendar
     @calendar.destroy!
     redirect_to calendars_url, notice: "Calendar was successfully destroyed."
   end

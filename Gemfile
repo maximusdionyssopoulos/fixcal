@@ -72,3 +72,5 @@ gem "nanoid", "~> 2.0"
 gem "httparty", "~> 0.22.0"
 
 gem "nokogiri", "~> 1.18"
+
+gem "pundit", "~> 2.4"
