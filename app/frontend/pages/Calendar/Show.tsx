@@ -1,4 +1,4 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import Calendar from "./Calendar";
 import { CalendarType } from "./types";
 import { MoveLeft } from "lucide-react";
