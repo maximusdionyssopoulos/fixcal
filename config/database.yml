@@ -18,8 +18,13 @@ default: &default
   host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
 
 development:
-  <<: *default
-  database: fixture_calendar_development
+  primary:
+    <<: *default
+    database: fixture_calendar_development
+  queue:
+    <<: *default
+    database: fixture_calendar_development_queue
+    migrations_paths: db/queue_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
