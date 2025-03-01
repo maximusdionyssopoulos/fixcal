@@ -1,10 +1,11 @@
 import { Head, Link } from "@inertiajs/react";
 import Calendar from "./Calendar";
 import { CalendarType } from "./types";
-import { MoveLeft } from "lucide-react";
+import { Download, MoveLeft, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "sonner";
+import axios, { AxiosError } from "axios";
 
 interface ShowProps {
   calendar: CalendarType;
@@ -12,6 +13,31 @@ interface ShowProps {
 }
 
 export default function Show({ calendar, flash }: ShowProps) {
+  const handleDownload = async () => {
+    try {
+      const response = await axios.get(
+        `/calendars//${calendar.public_id}/download`,
+      );
+      // transform the response into a blob which can be downloaded
+      let blob = new Blob([response.data], { type: "text/calendar" });
+      let link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      // TODO: extract and set filename
+      link.download = "fixtures.ics";
+      link.click();
+    } catch (error: AxiosError<{ data: string }> | Error | unknown) {
+      // if (axios.isAxiosError(error)) {
+      //   if (error.response?.data) {
+      //     setError("url", error.response.data.error as string);
+      //   } else {
+      //     setError("url", "Failed to download calendar. Please try again.");
+      //   }
+      // } else {
+      //   setError("url", "An unexpected error occurred.");
+      // }
+    }
+  };
+
   if (!calendar) {
     return (
       <div className="mx-auto max-w-xl w-full grow p-8 space-y-4 text-center rounded-lg mt-8 flex flex-col items-center justify-center min-h-[80vh]">
@@ -48,14 +74,18 @@ export default function Show({ calendar, flash }: ShowProps) {
           >
             <MoveLeft /> All Calendars
           </Link>
-          <div className="space-x-2">
+          <div className="space-x-2 inline-flex items-center flex-wrap">
+            <Button onClick={handleDownload} variant={"ghost"} size={"icon"}>
+              <Download />
+            </Button>
             <Link
               href={`/calendars/${calendar.public_id}/edit`}
               className={cn(
                 buttonVariants({ variant: "outline", size: "default" }),
               )}
             >
-              Edit Calendar
+              <Pencil className="sm:hidden" />
+              <span className="hidden sm:block">Edit Calendar</span>
             </Link>
             {/* TODO: Add a confirmation here */}
             <Link
@@ -70,7 +100,8 @@ export default function Show({ calendar, flash }: ShowProps) {
                 }),
               )}
             >
-              Delete
+              <Trash2 className="sm:hidden" />
+              <span className="hidden sm:block">Delete</span>
             </Link>
           </div>
         </div>

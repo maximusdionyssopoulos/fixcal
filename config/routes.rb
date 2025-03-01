@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :calendars, except: [ :new ], param: :public_id
+  resources :calendars, except: [ :new ], param: :public_id do
+    get :download, on: :member
+  end
 
   get "/download", to: "root#download"
 
