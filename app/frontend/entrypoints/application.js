@@ -29,6 +29,9 @@ console.log(
 
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
+
+// We disable the state to ensure that browser cache is not showing users data that is deleted
+// see https://github.com/inertiajs/inertia/issues/565 for more
 import { router } from "@inertiajs/react";
 
 window.addEventListener("popstate", (event) => {
