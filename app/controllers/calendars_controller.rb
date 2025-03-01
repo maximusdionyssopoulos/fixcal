@@ -33,6 +33,10 @@ class CalendarsController < ApplicationController
 
     if @calendar.save
       @calendar.fetch_and_generate_ics(params[:url])
+      # after we have created the calendar we need to enqueue the first job to refresh the data
+      # each subsequent job will enqueue the next job
+      UpdateCalendarJob.set(wait: 12.hours).perform_later(@calendar)
+      # UpdateCalendarJob.set(wait: 1.minutes).perform_later(@calendar)
 
       redirect_to @calendar, notice: "Calendar was successfully created."
     else
@@ -46,6 +50,7 @@ class CalendarsController < ApplicationController
     if @calendar.update(calendar_params)
       # don't re-generate if the urls are the same
       unless url.eql? @calendar.url
+        # we do not need to manage any jobs here - the job will use the fetch_url from the calendar model
         @calendar.fetch_and_generate_ics(calendar_params[:url])
       end
       redirect_to @calendar, notice: "Calendar was successfully updated."
