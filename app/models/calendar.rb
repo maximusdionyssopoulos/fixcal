@@ -12,12 +12,12 @@ class Calendar < ApplicationRecord
     fixture_service = FixtureService.new
     if url.present?
       data = fixture_service.fetch_and_extract_data(url)
-      self.store_api_url(data)
+      self.store_api_url!(data)
     elsif self.fetch_url.present?
       data = fixture_service.fetch_data(self.fetch_url)
     else
       data = fixture_service.fetch_and_extract_data(self.url)
-      self.store_api_url(data)
+      self.store_api_url!(data)
     end
 
     calendar_data = IcsService.new(data[:completed_matches], data[:upcoming_matches]).generate
