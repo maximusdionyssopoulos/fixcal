@@ -4,9 +4,9 @@ class IcsService
     @upcoming_match_data = upcoming_match_data
   end
 
+  # iterate over all completed & upcoming data and return a ical/ics string format
   def generate
     calendar = Icalendar::Calendar.new
-    # completed matches
     @completed_match_data.each do |match|
       event = Icalendar::Event.new
       event.summary = "#{match["HomeTeam"]["Name"]} - #{match["AwayTeam"]["Name"]} (#{match["HomeTeamScore"]} - #{match["AwayTeamScore"]})"
@@ -42,7 +42,6 @@ class IcsService
                     current_year
     end
 
-    # Combine date and time with year
     datetime_str = "#{date_str}, #{year_to_use} #{time_str}"
 
     # Parse the combined string
