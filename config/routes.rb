@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   as :user do
     get "auth", to: "users/sessions#new"
+    delete "auth", to: "users/sessions#destroy"
   end
 
   # inertia "/" => "Root"

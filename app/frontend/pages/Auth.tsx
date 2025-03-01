@@ -36,7 +36,7 @@ export default function Auth({ token }: { token: string }) {
     <form
       action="/users/auth/google_oauth2"
       method="post"
-      className="flex flex-col items-center justify-center h-full gap-6"
+      className="flex flex-col items-center justify-center h-full gap-6 grow"
     >
       <h1 className="text-3xl font-semibold tracking-tight font-mono">
         Sign in to FixCal

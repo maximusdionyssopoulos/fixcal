@@ -29,6 +29,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               >
                 Calendars
               </Link>
+              <Link
+                href="/auth"
+                method="delete"
+                className={cn(
+                  buttonVariants({ variant: "link", size: "default" }),
+                )}
+              >
+                Log Out
+              </Link>
             </div>
           ) : (
             <Link

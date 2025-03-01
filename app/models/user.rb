@@ -10,6 +10,7 @@ class User < ApplicationRecord
   def self.from_omniauth(access_token)
     data = access_token.info
     user = User.where(email: data["email"]).first
+    Rails.logger.debug user
     unless user
       user = User.create(
         full_name: data["name"],
@@ -18,5 +19,7 @@ class User < ApplicationRecord
         uid: access_token["uid"]
       )
     end
+
+    user
   end
 end
