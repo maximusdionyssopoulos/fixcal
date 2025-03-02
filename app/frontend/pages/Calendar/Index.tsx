@@ -43,7 +43,7 @@ export default function Index({ calendars, flash }: IndexProps) {
     >
       <div className="font-medium text-lg flex flex-col gap-0.5 group-hover:font-semibold">
         team-{getTeamId(calendar.url)}
-        <div className="flex items-center text-sm gap-2 text-muted-foreground">
+        <div className="flex flex-wrap items-center text-sm gap-2 text-muted-foreground">
           <StatusBadge status="Completed">
             {" "}
             Matches ({calendar.completed_events.length})
