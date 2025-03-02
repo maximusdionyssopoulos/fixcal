@@ -11,15 +11,11 @@ class CalendarPolicy < ApplicationPolicy
     user == record.user
   end
 
-  def downlaod
-    user == record.user
-  end
-
   def edit
     update?
   end
 
-  def destroy
+  def destroy?
     user == record.user
   end
 
