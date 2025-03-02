@@ -1,6 +1,6 @@
 class CalendarsController < ApplicationController
-  before_action :require_google_oauth_user!
-  before_action :set_calendar, only: %i[ show edit update destroy download ]
+  before_action :require_google_oauth_user!, except: [ :show ]
+  before_action :set_calendar, only: %i[ show edit update destroy ]
 
   # GET /calendars
   def index
@@ -14,19 +14,19 @@ class CalendarsController < ApplicationController
 
   # GET /calendars/1
   def show
-    authorize @calendar
-    render inertia: "Calendar/Show", props: {
-      calendar: serialize_calendar(@calendar)
-    }
-  end
-
-  # GET /calendars/1/download
-  def download
-    authorize @calendar
-    send_data @calendar.ics_file.download,
-      type: "text/calendar",
-      disposition: "attachment",
-      filename: "#{@calendar.public_id}-fixtures.ics"
+    respond_to do |format|
+      format.html do
+        return redirect_to auth_path unless user_signed_in?
+        authorize @calendar
+        render inertia: "Calendar/Show", props: {
+        calendar: serialize_calendar(@calendar)
+      }
+      end
+      format.ics { send_data @calendar.ics_file.download,
+        type: "text/calendar",
+        disposition: "attachment",
+        filename: "#{@calendar.public_id}-fixtures.ics" }
+    end
   end
 
   # GET /calendars/1/edit
