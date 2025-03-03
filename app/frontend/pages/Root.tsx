@@ -17,6 +17,7 @@ export default function Root() {
   };
 
   // To ensure the download we need to use a non-inertia request thus use the axios library since sits included
+  // we use this instead of an a tag to allow for better error handling
   const handleDownload = async () => {
     if (
       !data.url ||
@@ -87,7 +88,7 @@ export default function Root() {
                     value={data.url}
                     onChange={(e) => setData("url", e.target.value)}
                     placeholder="https://sportfix.net/app/teamdetails?"
-                    className=" bg-background h-12 border-orange-200/20"
+                    className=" bg-background h-12 border-orange-200 dark:border-orange-900"
                   />
                   {errors.url && (
                     <div className="text-sm text-destructive-foreground">

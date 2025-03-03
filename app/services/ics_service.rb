@@ -1,12 +1,14 @@
 class IcsService
-  def initialize(completed_match_data, upcoming_match_data)
+  def initialize(completed_match_data, upcoming_match_data, name)
     @completed_match_data = completed_match_data
     @upcoming_match_data = upcoming_match_data
+    @name = name
   end
 
   # iterate over all completed & upcoming data and return a ical/ics string format
   def generate
     calendar = Icalendar::Calendar.new
+    calendar.x_wr_calname = @name
     @completed_match_data.each do |match|
       event = Icalendar::Event.new
       event.summary = "#{match["HomeTeam"]["Name"]} - #{match["AwayTeam"]["Name"]} (#{match["HomeTeamScore"]} - #{match["AwayTeamScore"]})"

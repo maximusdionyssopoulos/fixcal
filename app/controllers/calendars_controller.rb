@@ -93,12 +93,12 @@ class CalendarsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def calendar_params
-      params.expect(calendar: [ :url ])
+      params.expect(calendar: [ :url, :name ])
     end
 
     def serialize_calendar(calendar)
       calendar.as_json(only: [
-        :url, :upcoming_events, :completed_events, :public_id
+        :url, :upcoming_events, :completed_events, :public_id, :name
       ])
     end
 end

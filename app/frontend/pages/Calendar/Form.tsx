@@ -10,13 +10,15 @@ type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<
 
 interface FormProps {
   url: string;
-  onSubmit: (form: InertiaFormProps<{ url: string }>) => void;
+  name: string;
+  onSubmit: (form: InertiaFormProps<{ url: string; name: string }>) => void;
   submitText: string;
 }
 
-export default function Form({ url, onSubmit, submitText }: FormProps) {
+export default function Form({ url, name, onSubmit, submitText }: FormProps) {
   const form = useForm({
     url: url,
+    name: name,
   });
   const { data, setData, errors, processing } = form;
 
@@ -28,7 +30,26 @@ export default function Form({ url, onSubmit, submitText }: FormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <label htmlFor="url" hidden>
+        <label htmlFor="name" className="text-muted-foreground text-sm">
+          Name
+        </label>
+        <Input
+          type="text"
+          name="name"
+          id="name"
+          value={data.name}
+          placeholder="Calendar Name"
+          className="bg-background h-12"
+          onChange={(e) => setData("name", e.target.value)}
+        />
+        {errors.url && (
+          <div className="text-sm text-destructive-foreground">
+            {errors.url}
+          </div>
+        )}
+      </div>
+      <div className="space-y-2">
+        <label htmlFor="url" className="text-muted-foreground text-sm">
           Url
         </label>
         <Input

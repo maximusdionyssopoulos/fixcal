@@ -24,7 +24,8 @@ class FixtureService
     {
       api_url: api_url,
       completed_matches: data[:completed_matches],
-      upcoming_matches: data[:upcoming_matches]
+      upcoming_matches: data[:upcoming_matches],
+      name: data[:name]
     }
   end
 
@@ -36,6 +37,7 @@ class FixtureService
     return nil unless data["MobTeamDetails"]
 
     {
+      name: data["MobTeamDetails"]["Name"],
       completed_matches: data["MobTeamDetails"]["CompletedMatchCollection"],
       upcoming_matches: data["MobTeamDetails"]["UpcomingMatchCollection"]
     }

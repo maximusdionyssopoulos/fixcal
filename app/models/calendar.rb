@@ -20,10 +20,11 @@ class Calendar < ApplicationRecord
       self.store_api_url!(data)
     end
 
-    calendar_data = IcsService.new(data[:completed_matches], data[:upcoming_matches]).generate
+    calendar_data = IcsService.new(data[:completed_matches], data[:upcoming_matches], data[:name]).generate
 
     self.upcoming_events = data[:upcoming_matches]
     self.completed_events = data[:completed_matches]
+    self.name = data[:name]
 
     self.ics_file.attach(
           io: StringIO.new(calendar_data),

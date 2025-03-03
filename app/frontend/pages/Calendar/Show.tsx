@@ -18,8 +18,8 @@ interface ShowProps {
 }
 
 export default function Show({ calendar, flash }: ShowProps) {
+  // replace https:// to webcal://
   const getWebcalUrl = () => {
-    // Convert your regular URL to webcal
     const baseUrl = window.location.origin;
     const calendarPath = `${calendar.public_id}.ics`;
     return `webcal://${baseUrl.replace(/^https?:\/\//, "")}/calendars/${calendarPath}`;

@@ -3,6 +3,7 @@ export interface CalendarType {
   upcoming_events: [Event];
   completed_events: [Event];
   public_id: string;
+  name: string;
 }
 
 export interface Event {
