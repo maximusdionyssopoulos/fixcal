@@ -14,7 +14,6 @@ class UpdateCalendarJob < ApplicationJob
   def perform(calendar)
     calendar.fetch_and_generate_ics(nil)
 
-    # self.class.set(wait: 12.hours).perform_later(calendar)
-    self.class.set(wait: 1.minutes).perform_later(calendar)
+    self.class.set(wait: 12.hours).perform_later(calendar)
   end
 end

@@ -49,7 +49,6 @@ class CalendarsController < ApplicationController
       # after we have created the calendar we need to enqueue the first job to refresh the data
       # each subsequent job will enqueue the next job
       UpdateCalendarJob.set(wait: 12.hours).perform_later(@calendar)
-      # UpdateCalendarJob.set(wait: 1.minutes).perform_later(@calendar)
 
       redirect_to @calendar, notice: "Calendar was successfully created."
     else

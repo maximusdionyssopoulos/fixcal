@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.1"
 # Use mysql as the database for Active Record
 gem "mysql2", "~> 0.5"
+gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -74,3 +75,5 @@ gem "httparty", "~> 0.22.0"
 gem "nokogiri", "~> 1.18"
 
 gem "pundit", "~> 2.4"
+
+gem "solargraph"
