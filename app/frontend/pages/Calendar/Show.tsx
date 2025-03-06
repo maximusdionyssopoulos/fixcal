@@ -11,6 +11,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ShowProps {
   calendar: CalendarType;
@@ -82,70 +93,99 @@ export default function Show({ calendar, flash }: ShowProps) {
             >
               Subscribe
             </a>
-            <div className="space-x-2 hidden sm:contents">
-              <Link
-                href={`/calendars/${calendar.public_id}/edit`}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "default" }),
-                )}
-              >
-                Edit Calendar
-              </Link>
-
-              {/* TODO: Add a confirmation here */}
-              <Link
-                href={`/calendars/${calendar.public_id}`}
-                as="button"
-                method="delete"
-                className={cn(
-                  buttonVariants({
-                    variant: "destructive",
-                    size: "default",
-                    className: "bg-red-500 hover:bg-red-600 ",
-                  }),
-                )}
-              >
-                Delete
-              </Link>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="sm:hidden">
-                  <MoreVertical className="h-4 w-4" />
-                  <span className="sr-only">More options</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <a
-                    href={`/calendars/${calendar.public_id}.ics`}
-                    className="flex items-center gap-2 w-full"
+            <AlertDialog>
+              <div className="space-x-2 hidden sm:contents">
+                <Link
+                  href={`/calendars/${calendar.public_id}/edit`}
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "default" }),
+                  )}
+                >
+                  Edit Calendar
+                </Link>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant={"destructive"}
+                    className="bg-red-500 hover:bg-red-600"
                   >
-                    <Download /> Download
-                  </a>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={`/calendars/${calendar.public_id}/edit`}
-                    className="flex items-center gap-2 w-full"
-                  >
-                    <Pencil className="" />
-                    <span className="">Edit Calendar</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild variant="destructive">
-                  <Link
-                    href={`/calendars/${calendar.public_id}`}
-                    as="button"
-                    method="delete"
-                    className="flex items-center gap-2 w-full"
-                  >
-                    <Trash2 className="" />
                     Delete
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  </Button>
+                </AlertDialogTrigger>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="sm:hidden">
+                    <MoreVertical className="h-4 w-4" />
+                    <span className="sr-only">More options</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <a
+                      href={`/calendars/${calendar.public_id}.ics`}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <Download /> Download
+                    </a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/calendars/${calendar.public_id}/edit`}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <Pencil className="" />
+                      <span className="">Edit Calendar</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem variant="destructive">
+                      {/* <Link
+                        href={`/calendars/${calendar.public_id}`}
+                        as="button"
+                        method="delete"
+                        className="flex items-center gap-2 w-full"
+                      > */}
+                      <Trash2 className="" />
+                      Delete
+                      {/* </Link> */}
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete this calendar?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the calendar and its ICS file from our servers. Any
+                    applications where you've subscribed to this calendar will
+                    stop receiving updates, and the calendar links will no
+                    longer work.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction asChild>
+                    <Link
+                      href={`/calendars/${calendar.public_id}`}
+                      as="button"
+                      method="delete"
+                      className={cn(
+                        buttonVariants({
+                          variant: "destructive",
+                          size: "default",
+                          className: "bg-red-500 hover:bg-red-600 ",
+                        }),
+                      )}
+                    >
+                      Delete
+                    </Link>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>
@@ -155,3 +195,19 @@ export default function Show({ calendar, flash }: ShowProps) {
     </>
   );
 }
+
+// const DeleteButton = ({
+//   isMobile = false,
+//   public_id,
+// }: {
+//   isMobile?: boolean;
+//   public_id: string;
+// }) => {
+//   if (isMobile) {
+//     return;
+//   }
+
+//   return (
+
+//   );
+// };

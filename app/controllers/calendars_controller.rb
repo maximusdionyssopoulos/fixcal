@@ -75,6 +75,9 @@ class CalendarsController < ApplicationController
   # DELETE /calendars/1
   def destroy
     authorize @calendar
+    # this will use the job system to delete the active storage asynchronously
+    # this will cause the UI to appear faster providing better UX
+    @calendar.ics_file.purge_later
     @calendar.destroy!
     redirect_to calendars_url, notice: "Calendar was successfully destroyed."
   end
