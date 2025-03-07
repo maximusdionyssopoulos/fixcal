@@ -44,7 +44,7 @@ test:
 #
 # Instead, provide the password or a full connection URL as an environment
 # variable when you boot the app. For example:
-#
+
 #   DATABASE_URL="mysql2://myuser:mypass@localhost/somedatabase"
 #
 # If the connection URL is provided in the special DATABASE_URL environment
@@ -61,9 +61,10 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: fixture_calendar_production
-    username: fixture_calendar
-    password: <%= ENV["FIXTURE_CALENDAR_DATABASE_PASSWORD"] %>
+    database: <%= Rails.application.credentials.dig(:database, :name) %>
+    username: <%= Rails.application.credentials.dig(:database, :user) %>
+    password: <%= Rails.application.credentials.dig(:database, :password) %>
+    host: <%= Rails.application.credentials.dig(:database, :host) %>
   cache:
     <<: *sqlite
     database: storage/fixture_calendar_production_cache

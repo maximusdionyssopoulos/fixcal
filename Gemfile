@@ -42,8 +42,6 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-
-  gem "dotenv"
 end
 
 group :development do
@@ -77,3 +75,7 @@ gem "nokogiri", "~> 1.18"
 gem "pundit", "~> 2.4"
 
 gem "solargraph"
+
+gem "rubocop"
+
+gem "aws-sdk-s3", require: false

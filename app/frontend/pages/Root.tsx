@@ -12,7 +12,6 @@ export default function Root() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Placeholder url
     post("/calendars");
   };
 
