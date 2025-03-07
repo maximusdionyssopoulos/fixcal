@@ -1,0 +1,1 @@
+CREATE DATABASE fixture_calendar_production;

@@ -9,7 +9,7 @@ import { Toaster } from "./sonner";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { signed_in } = usePage().props;
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <Head title="FixCal" />
       <main className="flex flex-col min-h-screen">
         <nav className="z-10 p-4 flex flex-row justify-between">
