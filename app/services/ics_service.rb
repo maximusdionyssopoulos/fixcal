@@ -3,6 +3,10 @@ class IcsService
     @completed_match_data = completed_match_data
     @upcoming_match_data = upcoming_match_data
     @name = name
+    # get the first match -assumes data is in order
+    @start_date = completed_match_data.to_a.empty? ?
+                  upcoming_match_data.to_a.first["MatchDate"] :
+                  completed_match_data.to_a.first["MatchDate"]
   end
 
   # iterate over all completed & upcoming data and return a ical/ics string format
@@ -32,21 +36,48 @@ class IcsService
 
   private
   def parse_match_datetime(date_str, time_str)
-    # Current year is needed since it's missing from the date string
     current_year = Time.now.year
-
-    # Handle potential year rollover (if date is in past months but should be next year)
     match_month = Date.parse(date_str).month
     current_month = Time.now.month
-    year_to_use = if match_month < current_month && match_month < 3
-                    current_year + 1
+    start_date = Date.parse(@start_date).month
+
+    # Case 1: start_date <= match_month && current_month < match_month
+    # We are checking if when we are creating the calendar we are in the new year but the
+    # match was last year. If the start is greater than the match we know the match is in the new year
+    # Example: Creating calendar in January (current_month=1)
+    #          Season starts in August (start_date=8)
+    #          Processing a November match (match_month=11)
+    # Result: This match belongs to the previous year (current_year-1)
+    #
+    # Case 2: start_date < match_month && current_month <= match_month
+    # We are checking if the match is taking place when the calendar in being created
+    # Example: Creating calendar in November (current_month=11)
+    #          Season starts in August (start_date=8)
+    #          Processing a November match (match_month=11)
+    # Result: This match belongs to the current year
+    #
+    # Case 3: start_date < match_month && current_month > match_month
+    # We are checking if the match is taking place next year
+    # Example: Creating calendar in January (current_month=1)
+    #          Season starts in August (start_date=8)
+    #          Processing a May match (match_month=5)
+    # Result: This match belongs to the next year (current_year+1)
+    #
+    #
+    # this assumes the fixtures are not a year long
+    # i.e. no fixture goes from December to December
+    year_to_use = if start_date <= match_month && current_month < match_month
+      current_year - 1
+    elsif start_date < match_month && current_month <= match_month
+      current_year
+    elsif start_date < match_month && current_month > match_month
+      current_year + 1
     else
-                    current_year
+      current_year
     end
 
     datetime_str = "#{date_str}, #{year_to_use} #{time_str}"
 
-    # Parse the combined string
     DateTime.parse(datetime_str)
   end
 end
