@@ -1,24 +1,41 @@
-# README
+# FixCal
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+FixCal is a web application that allows users to convert SportFix team fixtures into ICS calendars that can be downloaded and/or subscribed to from any calendar application.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- Convert SportFix team fixtures into ICS calendar files
+- Create and manage multiple calendars for different teams
+- One-click download of calendar files
+- Subscribe to calendars with webcal:// links
+- Background Jobs for Automatic calendar updates (every 12 hours)
+- Google OAuth sign-in for user authentication
+- Responsive design for mobile and desktop
+- Active Storage with S3 Bucket Object Storage for ICS files
 
-* System dependencies
+## Technical Stack
+- An Inertia-Rails React App:
 
-* Configuration
+### Backend
+- Ruby on Rails 8.0
+- PostgreSQL database
+- Solid Queue for background job processing
+- Active Storage for file storage
+- SQLite3 for SolidCache & SolidQueue
+- Devise + OmniAuth for authentication
+- Pundit for authorization
 
-* Database creation
+### Frontend
+- React 19.0 with TypeScript
+- Inertia.js for SPA-like navigation
+- Vite for asset bundling
+- TailwindCSS for styling
+- shadcn/ui component library
+- Lucide icons
 
-* Database initialization
+## Deployment
+Deployed with Kamal.
 
-* How to run the test suite
+## Author
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Created by Maximus Dionyssopoulos.
