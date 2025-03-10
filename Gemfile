@@ -80,3 +80,6 @@ gem "rubocop"
 gem "aws-sdk-s3", require: false
 
 gem "sqlite3", "~> 2.6"
+
+gem "mission_control-jobs"
+gem "propshaft"

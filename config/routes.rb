@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount MissionControl::Jobs::Engine, at: "/jobs"
   resources :calendars, except: [ :new ], param: :public_id
 
   get "/download", to: "root#download"
