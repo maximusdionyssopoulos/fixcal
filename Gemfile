@@ -71,7 +71,7 @@ gem "httparty", "~> 0.22.0"
 
 gem "nokogiri", "~> 1.18"
 
-gem "pundit", "~> 2.4"
+gem "pundit", "~> 2.5"
 
 gem "aws-sdk-s3", require: false
 

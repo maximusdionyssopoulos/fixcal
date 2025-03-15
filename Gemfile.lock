@@ -200,7 +200,7 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     mini_mime (1.1.5)
-    minitest (5.25.4)
+    minitest (5.25.5)
     mission_control-jobs (1.0.2)
       actioncable (>= 7.1)
       actionpack (>= 7.1)
@@ -292,7 +292,7 @@ GEM
     public_suffix (6.0.1)
     puma (6.6.0)
       nio4r (~> 2.0)
-    pundit (2.4.0)
+    pundit (2.5.0)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -499,7 +499,7 @@ DEPENDENCIES
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
-  pundit (~> 2.4)
+  pundit (~> 2.5)
   rails (~> 8.0.1)
   rubocop-rails-omakase
   selenium-webdriver
