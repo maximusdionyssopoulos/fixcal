@@ -1,7 +1,15 @@
 import { Head, Link } from "@inertiajs/react";
 import Calendar from "./Calendar";
 import { CalendarType } from "./types";
-import { Download, MoreVertical, MoveLeft, Pencil, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Download,
+  MoreVertical,
+  MoveLeft,
+  Pencil,
+  Share,
+  Trash2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -22,6 +30,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ShowProps {
   calendar: CalendarType;
@@ -58,6 +71,11 @@ export default function Show({ calendar, flash }: ShowProps) {
     );
   }
 
+  async function copyToClipboard(value: string) {
+    await navigator.clipboard.writeText(value);
+    toast.success("Link copied to clipboard");
+  }
+
   if (flash.notice) {
     toast.success(flash.notice);
   }
@@ -73,26 +91,21 @@ export default function Show({ calendar, flash }: ShowProps) {
             <MoveLeft /> All Calendars
           </Link>
           <div className="gap-2 inline-flex items-center flex-wrap">
-            <a
-              href={`/calendars/${calendar.public_id}.ics`}
-              className={cn(
-                buttonVariants({
-                  variant: "ghost",
-                  size: "icon",
-                  className: "hidden sm:flex",
-                }),
-              )}
-            >
-              <Download />
-            </a>
-            <a
-              href={getWebcalUrl()}
-              className={cn(
-                buttonVariants({ variant: "default", size: "default" }),
-              )}
-            >
-              Subscribe
-            </a>
+            <div className="flex overflow-hidden text-primary-foreground shadow-xs items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive ">
+              <a
+                className="bg-primary hover:bg-primary/90 rounded-sm rounded-r-none h-9 px-4 py-2 border-r"
+                href={getWebcalUrl()}
+              >
+                Subscribe
+              </a>
+              <button
+                className="h-9 px-3 py-2 rounded-r-sm bg-primary hover:bg-primary/90 cursor-pointer hidden sm:block"
+                onClick={() => copyToClipboard(getWebcalUrl())}
+              >
+                <Copy />
+              </button>
+            </div>
+
             <AlertDialog>
               <div className="hidden sm:contents">
                 <Link
@@ -101,8 +114,9 @@ export default function Show({ calendar, flash }: ShowProps) {
                     buttonVariants({ variant: "outline", size: "default" }),
                   )}
                 >
-                  Edit Calendar
+                  Edit
                 </Link>
+
                 <AlertDialogTrigger asChild>
                   <Button
                     variant={"destructive"}
@@ -111,6 +125,39 @@ export default function Show({ calendar, flash }: ShowProps) {
                     Delete
                   </Button>
                 </AlertDialogTrigger>
+                <Tooltip delayDuration={350}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"ghost"}
+                      className="cursor-pointer"
+                      onClick={() => copyToClipboard(window.location.href)}
+                    >
+                      <Share />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Share this calendar by link</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip delayDuration={350}>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={`/calendars/${calendar.public_id}.ics`}
+                      className={cn(
+                        buttonVariants({
+                          variant: "ghost",
+                          size: "icon",
+                          className: "hidden sm:flex",
+                        }),
+                      )}
+                    >
+                      <Download />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Download this calendar file</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -120,13 +167,11 @@ export default function Show({ calendar, flash }: ShowProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <a
-                      href={`/calendars/${calendar.public_id}.ics`}
-                      className="flex items-center gap-2 w-full"
-                    >
-                      <Download /> Download
-                    </a>
+                  <DropdownMenuItem
+                    onClick={() => copyToClipboard(getWebcalUrl())}
+                  >
+                    <Copy />
+                    Copy webcal link
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
@@ -137,6 +182,22 @@ export default function Show({ calendar, flash }: ShowProps) {
                       <span className="">Edit Calendar</span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <a
+                      href={`/calendars/${calendar.public_id}.ics`}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <Download /> Download
+                    </a>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => copyToClipboard(window.location.href)}
+                  >
+                    <Share />
+                    Share
+                  </DropdownMenuItem>
+
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem variant="destructive">
                       <Trash2 className="" />
