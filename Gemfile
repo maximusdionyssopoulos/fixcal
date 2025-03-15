@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.1"
+gem "rails", "~> 8.0.2"
 # Use mysql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -71,7 +71,7 @@ gem "httparty", "~> 0.22.0"
 
 gem "nokogiri", "~> 1.18"
 
-gem "pundit", "~> 2.4"
+gem "pundit", "~> 2.5"
 
 gem "aws-sdk-s3", require: false
 
