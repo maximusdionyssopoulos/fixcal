@@ -94,7 +94,7 @@ export default function Show({ calendar, flash }: ShowProps) {
               Subscribe
             </a>
             <AlertDialog>
-              <div className="space-x-2 hidden sm:contents">
+              <div className="hidden sm:contents">
                 <Link
                   href={`/calendars/${calendar.public_id}/edit`}
                   className={cn(
@@ -139,15 +139,8 @@ export default function Show({ calendar, flash }: ShowProps) {
                   </DropdownMenuItem>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem variant="destructive">
-                      {/* <Link
-                        href={`/calendars/${calendar.public_id}`}
-                        as="button"
-                        method="delete"
-                        className="flex items-center gap-2 w-full"
-                      > */}
                       <Trash2 className="" />
                       Delete
-                      {/* </Link> */}
                     </DropdownMenuItem>
                   </AlertDialogTrigger>
                 </DropdownMenuContent>
@@ -195,19 +188,3 @@ export default function Show({ calendar, flash }: ShowProps) {
     </>
   );
 }
-
-// const DeleteButton = ({
-//   isMobile = false,
-//   public_id,
-// }: {
-//   isMobile?: boolean;
-//   public_id: string;
-// }) => {
-//   if (isMobile) {
-//     return;
-//   }
-
-//   return (
-
-//   );
-// };
