@@ -100,6 +100,9 @@ const CalendarView = ({ calendars }: { calendars: CalendarType[] }) => {
                 team-{getTeamId(calendar.url)}
               </span>
             ) : null}
+            <span className="text-sm gap-2 text-muted-foreground">
+              {calendar.public ? "Publicly Viewable" : "Private"}
+            </span>
           </h3>
           <p data-active={headerInfo.isName ? true : false}></p>
           <div className="flex flex-wrap items-center text-sm gap-2 text-muted-foreground">

@@ -73,10 +73,6 @@ gem "nokogiri", "~> 1.18"
 
 gem "pundit", "~> 2.4"
 
-gem "solargraph"
-
-gem "rubocop"
-
 gem "aws-sdk-s3", require: false
 
 gem "sqlite3", "~> 2.6"

@@ -2,6 +2,7 @@ import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Temporary fix for InertiaFormProps not being exported from @inertiajs/react
 type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<
@@ -11,14 +12,28 @@ type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<
 interface FormProps {
   url: string;
   name: string;
-  onSubmit: (form: InertiaFormProps<{ url: string; name: string }>) => void;
+  publiclyAccessible: boolean;
+  onSubmit: (
+    form: InertiaFormProps<{
+      url: string;
+      name: string;
+      public: boolean;
+    }>,
+  ) => void;
   submitText: string;
 }
 
-export default function Form({ url, name, onSubmit, submitText }: FormProps) {
+export default function Form({
+  url,
+  name,
+  publiclyAccessible,
+  onSubmit,
+  submitText,
+}: FormProps) {
   const form = useForm({
     url: url,
     name: name,
+    public: publiclyAccessible,
   });
   const { data, setData, errors, processing } = form;
 
@@ -66,6 +81,32 @@ export default function Form({ url, name, onSubmit, submitText }: FormProps) {
             {errors.url}
           </div>
         )}
+      </div>
+      <div className="space-y-2 flex items-top space-x-2">
+        <Checkbox
+          name="publiclyAccessible"
+          id="publiclyAccessible"
+          checked={data.public}
+          onCheckedChange={(checked) => setData("public", checked as boolean)}
+        />
+        <div className="grid gap-1.5 leading-none">
+          <label
+            htmlFor="publiclyAccessible"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Public
+          </label>
+          <p className="text-sm text-muted-foreground">
+            When set to public, you can share this calendar via a direct link.
+            Note that anyone with the link will be able to view the calendar
+            contents. Only you will retain editing privileges.
+          </p>
+          {errors.public && (
+            <div className="text-sm text-destructive-foreground">
+              {errors.public}
+            </div>
+          )}
+        </div>
       </div>
       <Button
         type="submit"

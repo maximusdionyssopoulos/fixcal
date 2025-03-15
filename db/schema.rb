@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_03_001053) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_15_042240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_001053) do
     t.json "completed_events"
     t.string "fetch_url"
     t.string "name"
+    t.boolean "public", default: false
     t.index ["user_id"], name: "index_calendars_on_user_id"
   end
 

@@ -16,7 +16,7 @@ class CalendarsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        return redirect_to auth_path unless user_signed_in?
+        return redirect_to auth_path unless can_view_calendar?
         authorize @calendar
         render inertia: "Calendar/Show", props: {
         calendar: serialize_calendar(@calendar)
@@ -88,6 +88,14 @@ class CalendarsController < ApplicationController
       redirect_to auth_path unless user_signed_in?
     end
 
+    def can_view_calendar?
+      if @calendar.public
+        true
+      else
+        user_signed_in?
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_calendar
       @calendar = Calendar.find_by(public_id: params[:public_id])
@@ -95,12 +103,12 @@ class CalendarsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def calendar_params
-      params.expect(calendar: [ :url, :name ])
+      params.expect(calendar: [ :url, :name, :public ])
     end
 
     def serialize_calendar(calendar)
       calendar.as_json(only: [
-        :url, :upcoming_events, :completed_events, :public_id, :name
+        :url, :upcoming_events, :completed_events, :public_id, :name, :public
       ])
     end
 end

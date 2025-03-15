@@ -35,6 +35,7 @@ export default function Edit({ calendar }: EditProps) {
         <Form
           url={calendar.url}
           name={calendar.name}
+          publiclyAccessible={calendar.public}
           onSubmit={(form) => {
             form.transform((data) => ({ calendar: data }));
             form.patch(`/calendars/${calendar.public_id}`);

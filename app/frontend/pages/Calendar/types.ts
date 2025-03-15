@@ -4,6 +4,7 @@ export interface CalendarType {
   completed_events: [Event];
   public_id: string;
   name: string;
+  public: boolean;
 }
 
 export interface Event {
