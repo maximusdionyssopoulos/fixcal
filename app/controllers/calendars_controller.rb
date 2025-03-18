@@ -19,7 +19,8 @@ class CalendarsController < ApplicationController
         return redirect_to auth_path unless can_view_calendar?
         authorize @calendar
         render inertia: "Calendar/Show", props: {
-        calendar: serialize_calendar(@calendar)
+        calendar: serialize_calendar(@calendar),
+        can_edit: user_signed_in? && @calendar.user === current_user
       }
       end
       format.ics { send_data @calendar.ics_file.download,

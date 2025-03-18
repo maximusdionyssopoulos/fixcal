@@ -39,9 +39,11 @@ import {
 interface ShowProps {
   calendar: CalendarType;
   flash: { notice?: string };
+  can_edit: boolean;
 }
 
-export default function Show({ calendar, flash }: ShowProps) {
+export default function Show({ calendar, flash, can_edit }: ShowProps) {
+  console.log(can_edit);
   // replace https:// to webcal://
   const getWebcalUrl = () => {
     const baseUrl = window.location.origin;
@@ -108,23 +110,26 @@ export default function Show({ calendar, flash }: ShowProps) {
 
             <AlertDialog>
               <div className="hidden sm:contents">
-                <Link
-                  href={`/calendars/${calendar.public_id}/edit`}
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "default" }),
-                  )}
-                >
-                  Edit
-                </Link>
-
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant={"destructive"}
-                    className="bg-red-500 hover:bg-red-600"
-                  >
-                    Delete
-                  </Button>
-                </AlertDialogTrigger>
+                {can_edit ? (
+                  <>
+                    <Link
+                      href={`/calendars/${calendar.public_id}/edit`}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "default" }),
+                      )}
+                    >
+                      Edit
+                    </Link>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant={"destructive"}
+                        className="bg-red-500 hover:bg-red-600"
+                      >
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                  </>
+                ) : null}
                 <Tooltip delayDuration={350}>
                   <TooltipTrigger asChild>
                     <Button
@@ -173,15 +178,17 @@ export default function Show({ calendar, flash }: ShowProps) {
                     <Copy />
                     Copy webcal link
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`/calendars/${calendar.public_id}/edit`}
-                      className="flex items-center gap-2 w-full"
-                    >
-                      <Pencil className="" />
-                      <span className="">Edit Calendar</span>
-                    </Link>
-                  </DropdownMenuItem>
+                  {can_edit ? (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={`/calendars/${calendar.public_id}/edit`}
+                        className="flex items-center gap-2 w-full"
+                      >
+                        <Pencil className="" />
+                        <span className="">Edit Calendar</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : null}
                   <DropdownMenuItem asChild>
                     <a
                       href={`/calendars/${calendar.public_id}.ics`}
@@ -197,13 +204,14 @@ export default function Show({ calendar, flash }: ShowProps) {
                     <Share />
                     Share
                   </DropdownMenuItem>
-
-                  <AlertDialogTrigger asChild>
-                    <DropdownMenuItem variant="destructive">
-                      <Trash2 className="" />
-                      Delete
-                    </DropdownMenuItem>
-                  </AlertDialogTrigger>
+                  {can_edit ? (
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem variant="destructive">
+                        <Trash2 className="" />
+                        Delete
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                  ) : null}
                 </DropdownMenuContent>
               </DropdownMenu>
               <AlertDialogContent>
