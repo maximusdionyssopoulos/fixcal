@@ -20,11 +20,21 @@ class Calendar < ApplicationRecord
       self.store_api_url!(data)
     end
 
-    calendar_data = IcsService.new(data[:completed_matches], data[:upcoming_matches], data[:name]).generate
-
+    # If the calendar is to be archived - this means we should retain all previous matches rather than wiping them out
+    # thus we use hashdiff to find the difference and only patch on the updated
+    # we add onto the array by finding the difference and concating it
+    if self.completed_events.present? && self.archive
+        diff = Hashdiff.diff(self.completed_events, data[:completed_matches])
+        filtered_diff = diff.select { |item| item[0] == '~' }
+        Hashdiff.patch!(self.completed_events, filtered_diff)
+        self.completed_events.concat(data[:completed_matches] - self.completed_events)
+    else
+      self.completed_events = data[:completed_matches]
+    end
     self.upcoming_events = data[:upcoming_matches]
-    self.completed_events = data[:completed_matches]
     self.name = data[:name]
+
+    calendar_data = IcsService.new(self.completed_events, self.upcoming_events, self.name).generate
 
     self.ics_file.attach(
           io: StringIO.new(calendar_data),

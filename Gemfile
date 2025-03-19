@@ -79,3 +79,4 @@ gem "sqlite3", "~> 2.6"
 
 gem "mission_control-jobs"
 gem "propshaft"
+gem "hashdiff"

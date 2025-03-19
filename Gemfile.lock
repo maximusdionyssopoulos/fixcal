@@ -146,6 +146,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    hashdiff (1.1.2)
     hashie (5.0.0)
     httparty (0.22.0)
       csv
@@ -485,6 +486,7 @@ DEPENDENCIES
   capybara
   debug
   devise
+  hashdiff
   httparty (~> 0.22.0)
   icalendar (~> 2.10)
   inertia_rails (~> 3.6)
