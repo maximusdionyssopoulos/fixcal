@@ -2,7 +2,9 @@ import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Globe, Lock } from "lucide-react";
 
 // Temporary fix for InertiaFormProps not being exported from @inertiajs/react
 type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<
@@ -82,32 +84,51 @@ export default function Form({
           </div>
         )}
       </div>
-      <div className="space-y-2 flex items-top space-x-2">
-        <Checkbox
-          name="publiclyAccessible"
-          id="publiclyAccessible"
-          checked={data.public}
-          onCheckedChange={(checked) => setData("public", checked as boolean)}
-        />
-        <div className="grid gap-1.5 leading-none">
-          <label
-            htmlFor="publiclyAccessible"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+
+      <RadioGroup
+        value={data.public ? "public" : "private"}
+        onValueChange={(value) =>
+          setData("public", value === "public" ? true : false)
+        }
+        className="space-y-2 flex items-top space-x-2 w-full"
+      >
+        <div className="w-full">
+          <RadioGroupItem value="public" id="public" className="peer sr-only" />
+          <Label
+            htmlFor="public"
+            className="flex items-center gap-2 px-4 py-2 rounded-md border border-muted cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-muted/50 transition-colors"
           >
-            Public
-          </label>
-          <p className="text-sm text-muted-foreground">
-            When set to public, you can share this calendar via a direct link.
-            Note that anyone with the link will be able to view the calendar
-            contents. Only you will retain editing privileges.
-          </p>
-          {errors.public && (
-            <div className="text-sm text-destructive-foreground">
-              {errors.public}
+            <Globe />
+            <div className="flex flex-col">
+              <span className="font-medium">Public</span>
+              <span className="text-xs">Visible to everyone</span>
             </div>
-          )}
+          </Label>
         </div>
-      </div>
+        <div className="w-full">
+          <RadioGroupItem
+            value="private"
+            id="private"
+            className="peer sr-only"
+          />
+          <Label
+            htmlFor="private"
+            className="flex items-center gap-2 px-4 py-2 rounded-md border border-muted cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-muted/50 transition-colors"
+          >
+            <Lock />
+            <div className="flex flex-col">
+              <span className="font-medium">Private</span>
+              <span className="text-xs">Only visible to you</span>
+            </div>
+          </Label>
+        </div>
+        {errors.public && (
+          <div className="text-sm text-destructive-foreground">
+            {errors.public}
+          </div>
+        )}
+      </RadioGroup>
+
       <Button
         type="submit"
         disabled={processing}
