@@ -251,9 +251,7 @@ export default function Show({ calendar, flash, can_edit }: ShowProps) {
           </div>
         </div>
       </div>
-      <div className="max-w-5xl mx-auto w-full px-6">
-        <Calendar calendar={calendar} />
-      </div>
+      <Calendar calendar={calendar} />
     </>
   );
 }

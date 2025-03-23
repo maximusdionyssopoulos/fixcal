@@ -1,6 +1,12 @@
 import { CalendarType, Event as EventType } from "./types";
 import { CalendarClock, MapPin } from "lucide-react";
 import StatusBadge from "@/components/ui/status-badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface CalendarProps {
   calendar: CalendarType;
@@ -11,28 +17,60 @@ const scroller = (node: HTMLDivElement | null): void => {
 };
 
 export default function Calendar({ calendar }: CalendarProps) {
+  const groupedEvents = [
+    ...calendar.completed_events,
+    ...calendar.upcoming_events,
+  ].reduce(
+    (accumulator, currentEvent) => {
+      const key = currentEvent.CompetitionName;
+
+      if (!accumulator[key]) {
+        accumulator[key] = [];
+      }
+
+      accumulator[key].push(currentEvent);
+
+      return accumulator;
+    },
+    {} as Record<string, Array<EventType>>,
+  );
+  const competitions = Object.keys(groupedEvents);
+
   return (
-    <div className="relative pt-2">
-      <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-neutral-200 dark:bg-neutral-700" />
-      <div className="space-y-6">
-        {calendar.completed_events.map((event) => (
-          <Event
-            event={event}
-            key={event.AwayTeam + event.Round}
-            index={-1}
-            scroller={() => undefined}
-          />
-        ))}
-        {calendar.upcoming_events.map((event, index) => (
-          <Event
-            event={event}
-            key={event.AwayTeam + event.Round}
-            index={index}
-            scroller={scroller}
-          />
-        ))}
-      </div>
-    </div>
+    <Accordion
+      type="multiple"
+      defaultValue={competitions}
+      className="max-w-5xl mx-auto w-full px-6 grow"
+    >
+      {Object.entries(groupedEvents).map(([name, events], index) => (
+        <AccordionItem value={name} key={name}>
+          <AccordionTrigger className="p-4 text-base font-medium">
+            {name}
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="relative pt-2">
+              <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-neutral-200 dark:bg-neutral-700" />
+              <div className="space-y-6">
+                {events.map((event) => (
+                  <Event
+                    event={event}
+                    key={
+                      event.AwayTeam.Name + event.CompetitionName + event.Round
+                    }
+                    index={index === competitions.length - 1 ? 0 : -1}
+                    scroller={
+                      index === competitions.length - 1
+                        ? scroller
+                        : () => undefined
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 }
 
