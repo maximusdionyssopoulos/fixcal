@@ -154,8 +154,10 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    icalendar (2.10.3)
+    icalendar (2.12.1)
+      base64
       ice_cube (~> 0.16)
+      logger
       ostruct
     ice_cube (0.17.0)
     importmap-rails (2.1.0)
@@ -273,7 +275,7 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
-    ostruct (0.6.1)
+    ostruct (0.6.3)
     parallel (1.26.3)
     parser (3.3.7.1)
       ast (~> 2.4.1)
@@ -488,7 +490,7 @@ DEPENDENCIES
   devise
   hashdiff
   httparty (~> 0.22.0)
-  icalendar (~> 2.10)
+  icalendar (~> 2.12)
   inertia_rails (~> 3.7)
   jbuilder
   kamal
