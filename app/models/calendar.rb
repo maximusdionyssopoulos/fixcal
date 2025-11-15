@@ -27,7 +27,10 @@ class Calendar < ApplicationRecord
         diff = Hashdiff.diff(self.completed_events, data[:completed_matches])
         filtered_diff = diff.select { |item| item[0] == "~" }
         Hashdiff.patch!(self.completed_events, filtered_diff)
-        self.completed_events.concat(data[:completed_matches] - self.completed_events)
+
+        existing_set = Set.new(self.completed_events)
+        new_events = data[:completed_matches].reject { |event| existing_set.include?(event) }
+        self.completed_events.concat(new_events)
     else
       self.completed_events = data[:completed_matches]
     end
