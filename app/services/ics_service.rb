@@ -3,10 +3,6 @@ class IcsService
     @completed_match_data = completed_match_data
     @upcoming_match_data = upcoming_match_data
     @name = name
-    # get the first match -assumes data is in order
-    @start_date = completed_match_data.to_a.empty? ?
-                  upcoming_match_data.to_a.first["MatchDate"] :
-                  completed_match_data.to_a.first["MatchDate"]
   end
 
   # iterate over all completed & upcoming data and return a ical/ics string format
@@ -18,7 +14,7 @@ class IcsService
       event.summary = "#{match["HomeTeam"]["Name"]} - #{match["AwayTeam"]["Name"]} (#{match["HomeTeamScore"]} - #{match["AwayTeamScore"]})"
       event.location = match["CourtName"]
       event.description = "#{match["CompetitionName"]} - Round #{match["Round"]}"
-      event.dtstart = parse_match_datetime(match["MatchDate"], match["MatchTime"])
+      event.dtstart = parse_match_datetime(match["MatchDate"], match["MatchTime"], match["CompetitionName"])
       calendar.add_event(event)
     end
 
@@ -27,7 +23,7 @@ class IcsService
       event.summary = "#{match["HomeTeam"]["Name"]} - #{match["AwayTeam"]["Name"]}"
       event.location = match["CourtName"]
       event.description = "#{match["CompetitionName"]} - Round #{match["Round"]}"
-      event.dtstart = parse_match_datetime(match["MatchDate"], match["MatchTime"])
+      event.dtstart = parse_match_datetime(match["MatchDate"], match["MatchTime"], match["CompetitionName"])
       calendar.add_event(event)
     end
 
@@ -35,49 +31,45 @@ class IcsService
   end
 
   private
-  def parse_match_datetime(date_str, time_str)
-    current_year = Time.now.year
-    match_month = Date.parse(date_str).month
-    current_month = Time.now.month
-    start_date = Date.parse(@start_date).month
+  def parse_match_datetime(date_str, time_str, competition_name)
+    years = parse_year(competition_name)
 
-    # Case 1: start_date <= match_month && current_month < match_month
-    # We are checking if when we are creating the calendar we are in the new year but the
-    # match was last year. If the start is greater than the match we know the match is in the new year
-    # Example: Creating calendar in January (current_month=1)
-    #          Season starts in August (start_date=8)
-    #          Processing a November match (match_month=11)
-    # Result: This match belongs to the previous year (current_year-1)
-    #
-    # Case 2: start_date < match_month && current_month <= match_month
-    # We are checking if the match is taking place when the calendar in being created
-    # Example: Creating calendar in November (current_month=11)
-    #          Season starts in August (start_date=8)
-    #          Processing a November match (match_month=11)
-    # Result: This match belongs to the current year
-    #
-    # Case 3: start_date < match_month && current_month > match_month
-    # We are checking if the match is taking place next year
-    # Example: Creating calendar in January (current_month=1)
-    #          Season starts in August (start_date=8)
-    #          Processing a May match (match_month=5)
-    # Result: This match belongs to the next year (current_year+1)
-    #
-    #
-    # this assumes the fixtures are not a year long
-    # i.e. no fixture goes from December to December
-    year_to_use = if start_date <= match_month && current_month < match_month
-      current_year - 1
-    elsif start_date < match_month && current_month <= match_month
-      current_year
-    elsif start_date < match_month && current_month > match_month
-      current_year + 1
-    else
-      current_year
+    parsed_date = Date.parse(date_str)
+    wkday = parsed_date.wday
+    day = parsed_date.day
+    month = parsed_date.month
+
+    year = years.find do |year|
+      Date.new(year.to_i, month, day).wday == wkday
     end
 
-    datetime_str = "#{date_str}, #{year_to_use} #{time_str}"
+    datetime_str = "#{date_str}, #{year} #{time_str}"
 
     DateTime.parse(datetime_str)
+  end
+
+  def parse_year(competition_name)
+    years = []
+    pattern = /\b((?:19|20)\d{2})(?:\/(\d{2}))?\b/
+
+    matches = competition_name.scan(pattern)
+    matches.each do |match|
+      full_year, abbreviated_year = match
+
+      if full_year && full_year.length == 4 && full_year.match?(/^\d+$/)
+        years << full_year
+      end
+
+      if abbreviated_year
+        century = full_year[0, 2]
+        full_second_year = century + abbreviated_year
+
+        if full_second_year.length == 4 && full_second_year.match?(/^\d+$/)
+          years << full_second_year
+        end
+      end
+    end
+
+    years
   end
 end
