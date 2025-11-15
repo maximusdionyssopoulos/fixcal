@@ -25,7 +25,7 @@ class Calendar < ApplicationRecord
     # we add onto the array by finding the difference and concating it
     if self.completed_events.present? && self.archive
         diff = Hashdiff.diff(self.completed_events, data[:completed_matches])
-        filtered_diff = diff.select { |item| item[0] == '~' }
+        filtered_diff = diff.select { |item| item[0] == "~" }
         Hashdiff.patch!(self.completed_events, filtered_diff)
         self.completed_events.concat(data[:completed_matches] - self.completed_events)
     else
