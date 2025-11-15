@@ -32,23 +32,14 @@ class IcsService
 
   private
   def parse_match_datetime(date_str, time_str, competition_name)
-    years = parse_year(competition_name)
-
-    parsed_date = Date.parse(date_str)
-    wkday = parsed_date.wday
-    day = parsed_date.day
-    month = parsed_date.month
-
-    year = years.find do |year|
-      Date.new(year.to_i, month, day).wday == wkday
-    end
+    year = parse_year(competition_name: competition_name, date_str: date_str)
 
     datetime_str = "#{date_str}, #{year} #{time_str}"
 
     DateTime.parse(datetime_str)
   end
 
-  def parse_year(competition_name)
+  def parse_year(competition_name:, date_str:)
     years = []
     pattern = /\b((?:19|20)\d{2})(?:\/(\d{2}))?\b/
 
@@ -70,6 +61,10 @@ class IcsService
       end
     end
 
-    years
+    wday_str, month, day = date_str.split(/,\s*|\s+/)
+    years.each do |year|
+      d = Date.new(year.to_i, Date::ABBR_MONTHNAMES.index(month), day.to_i)
+      return year if d.strftime("%a") == wday_str
+    end
   end
 end
