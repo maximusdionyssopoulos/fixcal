@@ -31,6 +31,20 @@ class IcsService
   end
 
   private
+
+  def competition_spans_multiple_years?(competition_name)
+    matching_completed_matches = @completed_match_data.select { |match| match["CompetitionName"] == competition_name }
+    matching_upcoming_mathces = @upcoming_match_data.select { |match| match["CompetitionName"] == competition_name }
+    all_matching = [ *matching_completed_matches, *matching_upcoming_mathces ]
+    [ "Dec", "Jan" ].all? do |m|
+      all_matching.any? do |d|
+        _, month, _ = d["MatchDate"].split(/,\s*|\s+/)
+        m == month
+      end
+    end
+  end
+
+
   def parse_match_datetime(date_str, time_str, competition_name)
     year = parse_year(competition_name: competition_name, date_str: date_str)
 
@@ -49,6 +63,9 @@ class IcsService
 
       if full_year && full_year.length == 4 && full_year.match?(/^\d+$/)
         years << full_year
+        if competition_spans_multiple_years?(competition_name)
+          years.push((full_year.to_i - 1).to_s, (full_year.to_i + 1).to_s)
+        end
       end
 
       if abbreviated_year
